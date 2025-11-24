@@ -53,6 +53,29 @@ pnpm deploy
 
 The deployment will automatically build both the web and infra projects before deploying. After deployment, you'll see the CloudFront distribution URL in the outputs.
 
+## CI/CD Setup
+
+This project includes a GitHub Actions workflow that automatically deploys to AWS when code is merged to the `master` branch.
+
+### Required GitHub Secrets
+
+Configure this secret in your GitHub repository settings:
+
+**AWS_ROLE_ARN** - The ARN of the IAM role for GitHub OIDC authentication (e.g., `arn:aws:iam::123456789012:role/GitHubActionsRole`)
+
+The AWS region is configured in the workflow file (`.github/workflows/deploy.yml`).
+
+### Setting Up AWS OIDC for GitHub Actions
+
+To enable automated deployment for your repository, run the setup script:
+
+```bash
+./scripts/setup-github-oidc.sh
+```
+
+The script will automatically detect your repository and will create the necessary AWS infrastructure and add the secrets to GitHub.
+
+
 ## Tech Stack
 
 ### Tools
@@ -75,14 +98,15 @@ The deployment will automatically build both the web and infra projects before d
 - S3 bucket versioning for rollback capability
 - CloudFront managed security headers policy
 - Lifecycle management to retain limited previous versions of files
+- Automated CI/CD deployment via GitHub Actions
 
 ## Potential Enhancements
 
-- CI/CD pipeline integration (GitHub Actions, GitLab CI, etc.)
 - AWS WAF for additional web application firewall protection
-- S3 Intelligent Tiering for automatic cost optimization if longer lifecycle is required.
+- S3 Intelligent Tiering for automatic cost optimization if longer lifecycle is required
 - Custom domain with Route 53
 - Multi-environment setup (dev, staging, production)
+- CloudWatch alarms and monitoring dashboards
 
 ## Alternatives
 
