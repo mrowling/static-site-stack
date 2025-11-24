@@ -48,7 +48,7 @@ pnpm cdk bootstrap
 Deploy the stack:
 
 ```bash
-pnpm deploy
+pnpm run deploy
 ```
 
 The deployment will automatically build both the web and infra projects before deploying. After deployment, you'll see the CloudFront distribution URL in the outputs.
