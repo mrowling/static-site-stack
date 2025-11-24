@@ -6,9 +6,18 @@ import * as s3Deployment from 'aws-cdk-lib/aws-s3-deployment';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 
+export interface InfraStackProps extends cdk.StackProps {
+  /**
+   * Path to the web assets directory (for testing, can be overridden)
+   */
+  assetPath?: string;
+}
+
 export class InfraStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: InfraStackProps) {
     super(scope, id, props);
+
+    const assetPath = props?.assetPath ?? './../web/dist';
 
     const ONE_WEEK_IN_SECONDS = 7 * 24 * 60 * 60;
     const FIVE_MINUTES_IN_SECONDS = 5 * 60;
@@ -41,7 +50,7 @@ export class InfraStack extends cdk.Stack {
 
     // Deploy HTML entry files with short cache for fast rollback.
     new s3Deployment.BucketDeployment(this, 'DeployWebsiteHtml', {
-      sources: [s3Deployment.Source.asset('./../web/dist')],
+      sources: [s3Deployment.Source.asset(assetPath)],
       destinationBucket: websiteBucket,
       destinationKeyPrefix,
       distribution,
@@ -55,7 +64,7 @@ export class InfraStack extends cdk.Stack {
 
     // Deploy remaining static assets with long cache.
     new s3Deployment.BucketDeployment(this, 'DeployWebsiteAssets', {
-      sources: [s3Deployment.Source.asset('./../web/dist')],
+      sources: [s3Deployment.Source.asset(assetPath)],
       destinationBucket: websiteBucket,
       destinationKeyPrefix,
       distribution,
