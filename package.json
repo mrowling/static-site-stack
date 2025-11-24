@@ -1,6 +1,7 @@
 {
     "name": "static-site-stack",
     "private": true,
+    "packageManager": "pnpm@10.23.0",
     "scripts": {
         "build": "pnpm -r build",
         "build:web": "pnpm --filter static-site-stack-web build",
