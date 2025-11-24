@@ -1,0 +1,11 @@
+{
+    "name": "static-site-stack",
+    "private": true,
+    "scripts": {
+        "build": "pnpm -r build",
+        "build:web": "pnpm --filter static-site-stack-web build",
+        "build:infra": "pnpm --filter static-site-stack-infra build",
+        "test": "pnpm -r test",
+        "deploy": "pnpm --filter static-site-stack-infra cdk deploy"
+    }
+}
