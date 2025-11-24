@@ -1,3 +1,99 @@
 # Static Site Stack
 
-An exmaple Repo for creating a static website and hosting on the cloud.
+An example repo for creating a static website and hosting on the cloud.
+
+It takes an opinionated view, separating development from deployment into `web` and `infra` directories.
+
+## Prerequisites
+
+- Node.js installed
+- AWS CLI installed
+- AWS credentials configured
+
+## Getting Started
+
+### Install Dependencies
+
+```bash
+pnpm install
+```
+
+### Develop the Site
+
+```bash
+cd web
+pnpm dev
+```
+
+Build for production:
+
+```bash
+pnpm build
+```
+
+### Deploy to AWS
+
+```bash
+cd infra
+```
+
+Log in to AWS using your desired method and configure your profile appropriately.
+
+If this is the first time deploying to your AWS account:
+
+```bash
+pnpm cdk bootstrap
+```
+
+Deploy the stack:
+
+```bash
+pnpm deploy
+```
+
+The deployment will automatically build both the web and infra projects before deploying. After deployment, you'll see the CloudFront distribution URL in the outputs.
+
+## Tech Stack
+
+### Tools
+
+- **pnpm** - A modern node package manager that is much faster than npm
+- **AWS CDK** - TypeScript-based infrastructure as code with generally faster feature adoption than other languages. Co-exists nicely with the front-end ecosystem
+- **Vite** - Extremely fast in development with a rich ecosystem of production-ready plugins
+
+### Cloud Technologies
+
+- **AWS S3** - Cost-effective storage of static assets with versioning and lifecycle rules configured to retain only the 3 most recent noncurrent versions (expired after 360 days)
+- **AWS CloudFront** - Global CDN providing faster response times and cheaper data transfer out. Provides HTTPS, caching, and compression
+- **AWS ACM** - SSL/TLS certificates, courtesty of AWS Cloudfront.
+
+## Features
+
+- Caching of static assets (1 week for assets, 5 minutes for HTML)
+- DDoS protection via AWS Shield
+- S3 origin never exposed (Origin Access Control)
+- S3 bucket versioning for rollback capability
+- CloudFront managed security headers policy
+- Lifecycle management to retain limited previous versions of files
+
+## Potential Enhancements
+
+- CI/CD pipeline integration (GitHub Actions, GitLab CI, etc.)
+- AWS WAF for additional web application firewall protection
+- S3 Intelligent Tiering for automatic cost optimization if longer lifecycle is required.
+- Custom domain with Route 53
+- Multi-environment setup (dev, staging, production)
+
+## Alternatives
+
+**GitHub Pages** - Free static site hosting directly from a GitHub repository. Note: Only suitable if all data can be publicly available. 100GB per month bandwidth limit. Not intended for commercial services.
+
+**Cloudflare Pages** - Similar concept to GitHub Pages with the ability to host Pages Functions, enabling dynamic functionality without running a dedicated server.
+
+**AWS Amplify** - Managed service that can deploy web frameworks globally. Bundles CI/CD by connecting to a git repo.
+
+**AWS Lightsail** - Run Nginx on a VM to serve static files. More traditional approach with full server control.
+
+**Vercel** - Optimized for Next.js and modern web frameworks with excellent DX and automatic deployments.
+
+**Netlify** - Popular JAMstack platform with built-in CI/CD, serverless functions, and edge network.
