@@ -2,6 +2,8 @@
 import * as cdk from 'aws-cdk-lib/core';
 import { InfraStack } from '../lib/infra-stack';
 
+const ENVIRONMENT = process.env.ENV ?? 'production';
+
 const app = new cdk.App();
 new InfraStack(app, 'InfraStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
@@ -18,3 +20,6 @@ new InfraStack(app, 'InfraStack', {
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
+
+cdk.Tags.of(app).add('Service', 'example-static-site');
+cdk.Tags.of(app).add('Environment', ENVIRONMENT)
